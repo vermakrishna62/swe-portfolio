@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Krishnakant Verma — Backend Systems Engineer</title>
+<meta name="description" content="Backend-focused .NET engineer building distributed systems for maritime and commodity trading operations.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B1220;
+    --panel:#111A2C;
+    --panel-raised:#152238;
+    --line:#25314A;
+    --fog:#8A93A6;
+    --paper:#E8EAF0;
+    --brass:#C89B3C;
+    --brass-dim:#8A6B2A;
+    --beacon:#3FA9A0;
+    --beacon-dim:#2C7A73;
+    --danger:#C4694B;
+    --radius:2px;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'IBM Plex Sans', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:'';
+    position:fixed; inset:0;
+    background-image:
+      linear-gradient(var(--line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    opacity:0.06;
+    pointer-events:none;
+    z-index:0;
+  }
+  a{color:inherit;}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 32px;}
+  section{position:relative; z-index:1;}
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--beacon); outline-offset:3px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(11,18,32,0.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{
+    max-width:1120px; margin:0 auto; padding:16px 32px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-family:var(--mono); font-size:14px; letter-spacing:0.08em;
+    color:var(--brass); display:flex; align-items:center; gap:8px;
+  }
+  .brand-dot{width:7px; height:7px; border-radius:50%; background:var(--beacon); box-shadow:0 0 8px var(--beacon); animation:pulse 2.4s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.35;}}
+  nav.links{display:flex; gap:28px; font-family:var(--mono); font-size:13px; letter-spacing:0.04em;}
+  nav.links a{color:var(--fog); text-decoration:none; transition:color .15s;}
+  nav.links a:hover{color:var(--paper);}
+  .nav-cta{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.04em;
+    color:var(--ink); background:var(--brass); padding:9px 16px;
+    border-radius:var(--radius); text-decoration:none; border:1px solid var(--brass);
+    transition:background .15s;
+  }
+  .nav-cta:hover{background:#E0B75C;}
+  .menu-toggle{display:none; background:none; border:1px solid var(--line); color:var(--paper); font-family:var(--mono); padding:8px 10px; border-radius:var(--radius);}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:96px 0 72px; position:relative; overflow:hidden;}
+  .hero-grid{display:grid; grid-template-columns:1.3fr 1fr; gap:56px; align-items:center;}
+  .radar{
+    position:absolute; right:-120px; top:-80px; width:520px; height:520px;
+    pointer-events:none; opacity:0.5;
+  }
+  .radar circle{fill:none; stroke:var(--beacon-dim); stroke-width:1;}
+  .radar .sweep{
+    transform-origin:260px 260px;
+    animation:spin 6s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .eyebrow{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.14em; color:var(--beacon);
+    text-transform:uppercase; margin-bottom:20px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:24px; height:1px; background:var(--beacon);}
+  h1{
+    font-family:var(--display); font-weight:600; font-size:clamp(34px,5vw,54px);
+    line-height:1.08; letter-spacing:-0.01em; margin-bottom:22px;
+  }
+  h1 .accent{color:var(--brass);}
+  .hero-sub{color:var(--fog); font-size:17px; max-width:52ch; margin-bottom:32px;}
+  .hero-ctas{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:48px;}
+  .btn{
+    font-family:var(--mono); font-size:13px; letter-spacing:0.03em; padding:13px 22px;
+    border-radius:var(--radius); text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+    transition:all .15s; cursor:pointer; border:1px solid transparent;
+  }
+  .btn-primary{background:var(--brass); color:var(--ink); border-color:var(--brass); font-weight:600;}
+  .btn-primary:hover{background:#E0B75C;}
+  .btn-ghost{border-color:var(--line); color:var(--paper); background:transparent;}
+  .btn-ghost:hover{border-color:var(--beacon); color:var(--beacon);}
+
+  .console{
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; font-family:var(--mono);
+  }
+  .console-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:11px; letter-spacing:0.08em; color:var(--fog); text-transform:uppercase;
+    border-bottom:1px solid var(--line); padding-bottom:12px; margin-bottom:14px;
+  }
+  .console-head .dots{display:flex; gap:6px;}
+  .console-head .dots span{width:7px; height:7px; border-radius:50%; background:var(--line);}
+  .readout{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding:11px 0; border-bottom:1px dashed var(--line); font-size:13px;
+  }
+  .readout:last-child{border-bottom:none;}
+  .readout .label{color:var(--fog); font-size:12px;}
+  .readout .value{color:var(--beacon); font-weight:600; font-size:15px;}
+  .readout .value.brass{color:var(--brass);}
+
+  /* ---------- SECTION HEAD ---------- */
+  .section-head{margin-bottom:40px; padding-top:88px; margin-top:-88px;}
+  .section-tag{
+    font-family:var(--mono); font-size:12px; letter-spacing:0.14em; color:var(--brass);
+    text-transform:uppercase; margin-bottom:10px;
+  }
+  h2{font-family:var(--display); font-weight:600; font-size:clamp(26px,3.4vw,36px); letter-spacing:-0.01em;}
+  .section-desc{color:var(--fog); max-width:60ch; margin-top:10px; font-size:15px;}
+
+  /* ---------- ABOUT ---------- */
+  .about{padding:40px 0 24px;}
+  .about p{color:var(--fog); max-width:70ch; font-size:16px;}
+  .about strong{color:var(--paper); font-weight:500;}
+
+  /* ---------- SKILLS ---------- */
+  .skills{padding:64px 0;}
+  .skill-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .skill-card{background:var(--panel); padding:22px;}
+  .skill-card h3{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.08em; color:var(--beacon);
+    text-transform:uppercase; margin-bottom:12px;
+  }
+  .skill-card .tags{display:flex; flex-wrap:wrap; gap:7px;}
+  .tag{
+    font-family:var(--mono); font-size:12px; color:var(--fog); border:1px solid var(--line);
+    padding:4px 9px; border-radius:var(--radius); background:var(--ink);
+  }
+
+  /* ---------- EXPERIENCE ---------- */
+  .experience{padding:64px 0;}
+  .log-entry{
+    display:grid; grid-template-columns:160px 1fr; gap:32px;
+    padding:32px 0; border-top:1px solid var(--line);
+  }
+  .log-entry:last-child{border-bottom:1px solid var(--line);}
+  .log-date{font-family:var(--mono); font-size:13px; color:var(--fog); line-height:1.5;}
+  .log-date .now{color:var(--beacon);}
+  .log-body h3{font-family:var(--display); font-size:20px; font-weight:600; margin-bottom:2px;}
+  .log-body .org{font-family:var(--mono); font-size:13px; color:var(--brass); margin-bottom:16px;}
+  .log-body ul{list-style:none;}
+  .log-body li{
+    position:relative; padding-left:20px; margin-bottom:11px; color:var(--fog); font-size:14.5px; max-width:72ch;
+  }
+  .log-body li::before{content:'›'; position:absolute; left:0; color:var(--beacon); font-family:var(--mono);}
+  .log-body li strong{color:var(--paper); font-weight:500;}
+
+  /* ---------- PROJECTS ---------- */
+  .projects{padding:64px 0;}
+  .proj-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line); border:1px solid var(--line); margin-bottom:1px;}
+  .proj-card{background:var(--panel); padding:26px; display:flex; flex-direction:column;}
+  .proj-top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:12px;}
+  .proj-card h3{font-family:var(--display); font-size:19px; font-weight:600;}
+  .badge{
+    font-family:var(--mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase;
+    padding:4px 8px; border-radius:var(--radius); white-space:nowrap;
+  }
+  .badge.shipped{background:rgba(63,169,160,0.14); color:var(--beacon); border:1px solid var(--beacon-dim);}
+  .badge.concept{background:rgba(200,155,60,0.12); color:var(--brass); border:1px solid var(--brass-dim);}
+  .proj-stack{font-family:var(--mono); font-size:11.5px; color:var(--fog); margin-bottom:14px;}
+  .proj-card p{color:var(--fog); font-size:14px; margin-bottom:8px;}
+  .proj-card p:last-of-type{margin-bottom:0;}
+
+  .concept-note{
+    margin-top:28px; padding:18px 22px; border:1px solid var(--line); border-left:2px solid var(--brass);
+    font-family:var(--mono); font-size:12.5px; color:var(--fog); background:var(--panel);
+  }
+
+  /* ---------- ACHIEVEMENTS ---------- */
+  .achievements{padding:64px 0;}
+  .ach-list{border-top:1px solid var(--line);}
+  .ach-item{
+    display:grid; grid-template-columns:100px 1fr; gap:24px;
+    padding:20px 0; border-bottom:1px solid var(--line); align-items:baseline;
+  }
+  .ach-item .yr{font-family:var(--mono); color:var(--brass); font-size:13px;}
+  .ach-item p{color:var(--fog); font-size:14.5px;}
+  .ach-item strong{color:var(--paper); font-weight:500;}
+
+  /* ---------- EDUCATION ---------- */
+  .education{padding:64px 0;}
+  .edu-grid{display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line);}
+  .edu-card{background:var(--panel); padding:22px;}
+  .edu-card h3{font-family:var(--display); font-size:16px; font-weight:600; margin-bottom:4px;}
+  .edu-card .org{font-family:var(--mono); font-size:12.5px; color:var(--beacon); margin-bottom:10px;}
+  .edu-card .meta{font-family:var(--mono); font-size:12px; color:var(--fog); display:flex; justify-content:space-between;}
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{padding:80px 0 40px; border-top:1px solid var(--line); margin-top:40px;}
+  .footer-grid{display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:32px;}
+  footer h2{max-width:16ch;}
+  .contact-links{display:flex; flex-direction:column; gap:10px; font-family:var(--mono); font-size:14px;}
+  .contact-links a{text-decoration:none; color:var(--fog); transition:color .15s;}
+  .contact-links a:hover{color:var(--beacon);}
+  .foot-note{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); font-family:var(--mono); font-size:11.5px; color:var(--fog); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;}
+
+  /* ---------- AI ASSISTANT WIDGET ---------- */
+  #ai-fab{
+    position:fixed; bottom:26px; right:26px; z-index:100;
+    background:var(--brass); color:var(--ink); border:none; border-radius:999px;
+    padding:15px 20px; font-family:var(--mono); font-size:13px; font-weight:600;
+    display:flex; align-items:center; gap:9px; cursor:pointer;
+    box-shadow:0 8px 24px rgba(0,0,0,0.4); transition:transform .15s, background .15s;
+  }
+  #ai-fab:hover{transform:translateY(-2px); background:#E0B75C;}
+  #ai-fab .blip{width:7px; height:7px; border-radius:50%; background:var(--ink); animation:pulse 1.6s ease-in-out infinite;}
+
+  #ai-panel{
+    position:fixed; bottom:96px; right:26px; z-index:100;
+    width:380px; max-width:calc(100vw - 32px); height:min(520px, 70vh);
+    background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+    display:none; flex-direction:column; overflow:hidden;
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+  }
+  #ai-panel.open{display:flex;}
+  .ai-head{
+    padding:16px 18px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center;
+    background:var(--panel-raised);
+  }
+  .ai-head .title{font-family:var(--mono); font-size:12.5px; letter-spacing:0.05em; color:var(--beacon); display:flex; align-items:center; gap:8px;}
+  .ai-head button{background:none; border:none; color:var(--fog); font-size:18px; cursor:pointer; line-height:1;}
+  .ai-head button:hover{color:var(--paper);}
+  #ai-log{flex:1; overflow-y:auto; padding:16px 18px; display:flex; flex-direction:column; gap:12px;}
+  .msg{font-size:13.5px; line-height:1.55; max-width:88%;}
+  .msg.user{align-self:flex-end; background:var(--brass); color:var(--ink); padding:9px 13px; border-radius:var(--radius);}
+  .msg.bot{align-self:flex-start; color:var(--paper); background:var(--panel-raised); padding:9px 13px; border-radius:var(--radius); border:1px solid var(--line);}
+  .msg.bot.typing{color:var(--fog); font-family:var(--mono); font-size:12px;}
+  .ai-suggestions{display:flex; flex-wrap:wrap; gap:6px; padding:0 18px 12px;}
+  .chip{
+    font-family:var(--mono); font-size:11px; color:var(--fog); border:1px solid var(--line);
+    padding:6px 10px; border-radius:999px; background:transparent; cursor:pointer; transition:all .15s;
+  }
+  .chip:hover{border-color:var(--beacon); color:var(--beacon);}
+  .ai-input-row{display:flex; border-top:1px solid var(--line);}
+  .ai-input-row input{
+    flex:1; background:transparent; border:none; padding:14px 16px; color:var(--paper);
+    font-family:var(--body); font-size:13.5px;
+  }
+  .ai-input-row input::placeholder{color:var(--fog);}
+  .ai-input-row input:focus{outline:none;}
+  .ai-input-row button{
+    background:var(--brass); color:var(--ink); border:none; padding:0 18px; font-family:var(--mono);
+    font-size:13px; font-weight:600; cursor:pointer;
+  }
+  .ai-input-row button:hover{background:#E0B75C;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;}
+    .radar{display:none;}
+    nav.links{display:none;}
+    .menu-toggle{display:block;}
+    .skill-grid{grid-template-columns:1fr 1fr;}
+    .proj-grid{grid-template-columns:1fr;}
+    .edu-grid{grid-template-columns:1fr;}
+    .log-entry{grid-template-columns:1fr;}
+    .ach-item{grid-template-columns:70px 1fr;}
+    footer .footer-grid{flex-direction:column; align-items:flex-start;}
+  }
+  @media (max-width:520px){
+    .skill-grid{grid-template-columns:1fr;}
+    #ai-panel{right:16px; left:16px; width:auto; bottom:88px;}
+    #ai-fab{right:16px;}
+    .wrap{padding:0 20px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="brand-dot"></span> KRISHNAKANT VERMA / SWE</div>
+    <nav class="links">
+      <a href="#experience">Log</a>
+      <a href="#projects">Builds</a>
+      <a href="#skills">Systems</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta" href="mailto:vermakrishnakant138@gmail.com">Get in touch</a>
+  </div>
+</header>
+
+<section class="hero">
+  <svg class="radar" viewBox="0 0 520 520" aria-hidden="true">
+    <circle cx="260" cy="260" r="60"/><circle cx="260" cy="260" r="130"/><circle cx="260" cy="260" r="200"/><circle cx="260" cy="260" r="260"/>
+    <g class="sweep">
+      <path d="M260 260 L260 0 A260 260 0 0 1 405 65 Z" fill="url(#g)" opacity="0.5"/>
+    </g>
+    <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3FA9A0" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#3FA9A0" stop-opacity="0"/>
+    </linearGradient></defs>
+  </svg>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Backend Systems Engineer — Maritime &amp; Commodity Trading</div>
+      <h1>I build the systems that keep <span class="accent">ships compliant</span> and <span class="accent">trades settled</span>.</h1>
+      <p class="hero-sub">2.5 years shipping production-grade ASP.NET Core services for fleet operations and biofuel commodity trading — microservices, event-driven pipelines, and PostgreSQL at the core, with a track record of turning slow, manual processes into audited, automated ones.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary" onclick="openAI()">Ask the AI about my work</button>
+        <a class="btn btn-ghost" href="#experience">Read the build log ↓</a>
+      </div>
+    </div>
+    <div class="console">
+      <div class="console-head">
+        <span>ops_console.log</span>
+        <div class="dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="readout"><span class="label">Compliance report generation</span><span class="value brass">10× faster</span></div>
+      <div class="readout"><span class="label">Crew onboarding effort</span><span class="value">−95%</span></div>
+      <div class="readout"><span class="label">Event delivery failures</span><span class="value">−90%</span></div>
+      <div class="readout"><span class="label">Payroll processing time</span><span class="value">−65%</span></div>
+      <div class="readout"><span class="label">Manual audit effort</span><span class="value">−70%</span></div>
+      <div class="readout"><span class="label">Query response time</span><span class="value">−55%</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="about wrap">
+  <div class="section-head" id="about">
+    <div class="section-tag">Summary</div>
+    <h2>Two domains. One approach: own it end to end.</h2>
+  </div>
+  <p>I'm a <strong>.NET backend engineer</strong> who has spent the last 2.5 years inside two operationally demanding domains — <strong>maritime fleet management</strong> and <strong>biofuel commodity trading</strong>. Both come with the same underlying problem: real-world operations that need to be tracked, audited, and settled correctly, at scale, without manual bottlenecks. I design and ship the <strong>microservices, REST APIs, and event-driven pipelines</strong> that make that possible, on <strong>ASP.NET Core and PostgreSQL</strong>, and I stay with a system from first design through production monitoring.</p>
+</section>
+
+<section class="skills wrap" id="skills">
+  <div class="section-head">
+    <div class="section-tag">Instrumentation</div>
+    <h2>What I build with</h2>
+  </div>
+  <div class="skill-grid">
+    <div class="skill-card">
+      <h3>Languages &amp; Libraries</h3>
+      <div class="tags">
+        <span class="tag">C#</span><span class="tag">SQL</span><span class="tag">Java</span><span class="tag">Python</span><span class="tag">TypeScript</span><span class="tag">LINQ</span><span class="tag">Dapper</span><span class="tag">EF Core</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h3>Frameworks &amp; APIs</h3>
+      <div class="tags">
+        <span class="tag">ASP.NET Core</span><span class="tag">React.js</span><span class="tag">GraphQL</span><span class="tag">REST</span><span class="tag">gRPC</span><span class="tag">OpenAPI</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h3>Databases &amp; Search</h3>
+      <div class="tags">
+        <span class="tag">PostgreSQL</span><span class="tag">SQL Server</span><span class="tag">MongoDB</span><span class="tag">Redis</span><span class="tag">Elasticsearch</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h3>Cloud, DevOps &amp; Messaging</h3>
+      <div class="tags">
+        <span class="tag">Azure</span><span class="tag">Docker</span><span class="tag">Linux</span><span class="tag">Azure DevOps</span><span class="tag">RabbitMQ</span><span class="tag">Hangfire</span><span class="tag">Nginx</span><span class="tag">CI/CD</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h3>Architecture &amp; Design</h3>
+      <div class="tags">
+        <span class="tag">Microservices</span><span class="tag">Clean Architecture</span><span class="tag">CQRS</span><span class="tag">Event-Driven</span><span class="tag">Outbox Pattern</span><span class="tag">DDD-lite</span><span class="tag">HLD/LLD</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <h3>Security &amp; Practice</h3>
+      <div class="tags">
+        <span class="tag">JWT</span><span class="tag">OAuth 2.0</span><span class="tag">RBAC</span><span class="tag">Perf Tuning</span><span class="tag">Unit Testing</span><span class="tag">Agile/Scrum</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="experience wrap" id="experience">
+  <div class="section-head">
+    <div class="section-tag">Build Log</div>
+    <h2>Where I've shipped this</h2>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">Jan 2026 — <span class="now">Present</span></div>
+    <div class="log-body">
+      <h3>Senior Software Engineer</h3>
+      <div class="org">Fendahl International DWC LLC · Maritime Domain</div>
+      <ul>
+        <li><strong>Strengthened GDPR compliance</strong> across crew management for 15+ vessels with role-based access, audit trails, and secure data handling.</li>
+        <li><strong>Cut manual onboarding effort by 95%</strong> with bulk import tooling for crew and vessel assignments.</li>
+        <li><strong>Rebuilt a Razor Engine reporting platform</strong> that generates PDF compliance reports from client templates — report generation dropped from 30+ seconds to under 3 (10× improvement).</li>
+        <li><strong>Rebuilt multi-currency payroll</strong> for 15+ vessel crews and shore staff, trimming processing time by 65% and removing manual reconciliation.</li>
+        <li><strong>Launched a Work &amp; Rest Hour Violation engine</strong> across the fleet, cutting manual audit effort by 70% with zero regulatory breaches in fleet inspections.</li>
+        <li><strong>Engineered an Outbox Pattern event system</strong> for SignalR, email, and cache invalidation with retry and dead-letter tracking — event delivery failures down 90%.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="log-entry">
+    <div class="log-date">Feb 2024 — Dec 2025</div>
+    <div class="log-body">
+      <h3>Software Engineer</h3>
+      <div class="org">Fendahl International DWC LLC · Biofuel CTRM Domain</div>
+      <ul>
+        <li><strong>Rolled out a B2B commodity auction platform</strong> for biofuel trading — competitive bidding, automated lot allocation, end-to-end settlement.</li>
+        <li><strong>Integrated RazorpayX</strong> for vendor payout automation, cutting disbursement turnaround by 40%.</li>
+        <li><strong>Built a Zoho Books sync layer</strong> for invoices and ledgers, cutting reconciliation effort by 60% at 100% ledger accuracy.</li>
+        <li><strong>Led cross-tenant B2B integrations with CropBiz</strong> using RBAC-scoped contracts and JWT auth — no dual logins required.</li>
+        <li><strong>Automated HDFC eNet payment scheduling</strong> via bank-compliant CSV generation, saving finance teams 90% of manual processing effort.</li>
+        <li><strong>Optimized 15+ high-frequency PostgreSQL queries</strong> through indexing and schema redesign — average response time down 55% under peak load.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="projects wrap" id="projects">
+  <div class="section-head">
+    <div class="section-tag">Builds</div>
+    <h2>Shipped work &amp; open builds</h2>
+    <p class="section-desc">Two production side projects, plus three system designs in progress — extensions of patterns I use at work, built out as public proof of concepts.</p>
+  </div>
+
+  <div class="proj-grid">
+    <div class="proj-card">
+      <div class="proj-top"><h3>Contract Clause Analyzer</h3><span class="badge shipped">Shipped</span></div>
+      <div class="proj-stack">ASP.NET Core · GPT-4 · PostgreSQL · React · Docker</div>
+      <p>Parses uploaded contract PDFs, extracts individual clauses, and flags high-risk terms — uncapped liability, indemnity overreach, auto-renewal traps — cutting manual review to under 60 seconds per contract.</p>
+      <p>Async extraction pipeline with GPT-4 prompt orchestration and PostgreSQL persistence for full clause history. Containerized with Docker, structured for future approval-flow and audit-trail integration.</p>
+    </div>
+    <div class="proj-card">
+      <div class="proj-top"><h3>StreamCore</h3><span class="badge shipped">Shipped</span></div>
+      <div class="proj-stack">ASP.NET Core · React · Azure Blob Storage · Redis · Hangfire</div>
+      <p>A video learning platform with a custom binary streaming service using HTTP byte-range requests for progressive playback and chunk-level seeking without full re-download.</p>
+      <p>Background ingestion via Hangfire, scalable media storage on Azure Blob, and Redis caching to cut latency under concurrent load.</p>
+    </div>
+    <div class="proj-card">
+      <div class="proj-top"><h3>Fleet Compliance Event Bus</h3><span class="badge concept">Concept</span></div>
+      <div class="proj-stack">ASP.NET Core · RabbitMQ · PostgreSQL Outbox · Docker</div>
+      <p>Public write-up of the Outbox Pattern system built at Fendahl, generalized into an open reference implementation: transactional outbox, retry policy, dead-letter queue, and a live dashboard for event delivery health.</p>
+      <p>Goal: give backend teams a drop-in pattern for reliable event delivery without a distributed transaction.</p>
+    </div>
+    <div class="proj-card">
+      <div class="proj-top"><h3>Commodity Settlement Ledger</h3><span class="badge concept">Concept</span></div>
+      <div class="proj-stack">ASP.NET Core · CQRS · PostgreSQL · Redis</div>
+      <p>A CQRS reference build modeling trade settlement: a write model that enforces ledger invariants, a read model optimized and cached in Redis for trader-facing dashboards, and an event log that makes every balance change replayable.</p>
+      <p>Designed to mirror the auction-and-settlement systems built for biofuel trading, stripped down to a teachable open build.</p>
+    </div>
+    <div class="proj-card">
+      <div class="proj-top"><h3>This Portfolio's AI Assistant</h3><span class="badge concept">Concept</span></div>
+      <div class="proj-stack">ASP.NET Core / Node · Claude API · Retrieval</div>
+      <p>The "Ask the AI" panel on this page — a small retrieval layer over this résumé's structured data, answering recruiter questions about experience, stack, and availability. Ships today in rule-based form; wired for a Claude-powered backend in one file.</p>
+      <p>See <code>/api/chat.js</code> in the deploy package for the drop-in serverless upgrade.</p>
+    </div>
+  </div>
+
+  <div class="concept-note">
+    NOTE — cards marked <strong style="color:var(--brass)">Concept</strong> are system designs and planned open-source builds extending real patterns used in production at Fendahl. They are not yet public repos; ask the AI assistant for the design details on any of them.
+  </div>
+</section>
+
+<section class="achievements wrap" id="achievements">
+  <div class="section-head">
+    <div class="section-tag">Commendations</div>
+    <h2>Noted along the way</h2>
+  </div>
+  <div class="ach-list">
+    <div class="ach-item">
+      <div class="yr">2024–26</div>
+      <p>Promoted <strong>twice within 22 months</strong> at Fendahl — Intern → Associate SWE → Software Engineer — for consistent delivery and end-to-end ownership of production systems.</p>
+    </div>
+    <div class="ach-item">
+      <div class="yr">2026</div>
+      <p>Recognized by senior leadership at Fendahl for the compliance reporting platform's <strong>10× performance improvement</strong>, cutting report generation from 30+ seconds to under 3 across client configurations.</p>
+    </div>
+    <div class="ach-item">
+      <div class="yr">2024</div>
+      <p>Received appreciation from the <strong>Co-Founder and CEO of Fitverse</strong> for frontend delivery quality and React ownership across product initiatives.</p>
+    </div>
+  </div>
+</section>
+
+<section class="education wrap" id="education">
+  <div class="section-head">
+    <div class="section-tag">Education</div>
+    <h2>Foundations</h2>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <h3>B.Tech, Computer Science &amp; Engineering</h3>
+      <div class="org">Government College of Engineering, Amravati</div>
+      <div class="meta"><span>2021 – 2024</span><span>CGPA 8.99/10</span></div>
+    </div>
+    <div class="edu-card">
+      <h3>Diploma, Computer Engineering</h3>
+      <div class="org">Government Polytechnic, Amravati</div>
+      <div class="meta"><span>2018 – 2021</span><span>97.11%</span></div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="section-tag">Contact</div>
+        <h2>Open to backend &amp; distributed systems roles.</h2>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:vermakrishnakant138@gmail.com">vermakrishnakant138@gmail.com</a>
+        <a href="tel:+918329342791">+91 83293 42791</a>
+        <a href="https://linkedin.com/in/krishnakant-verma7" target="_blank" rel="noopener">linkedin.com/in/krishnakant-verma7</a>
+        <a href="https://github.com/vermakrishna62" target="_blank" rel="noopener">github.com/vermakrishna62</a>
+      </div>
+    </div>
+    <div class="foot-note">
+      <span>© 2026 Krishnakant Verma — built as a static, deployable site</span>
+      <span>Try the console in the corner →</span>
+    </div>
+  </div>
+</footer>
+
+<button id="ai-fab" onclick="openAI()"><span class="blip"></span> Ask AI about Krishnakant</button>
+
+<div id="ai-panel" role="dialog" aria-label="AI assistant">
+  <div class="ai-head">
+    <div class="title"><span class="brand-dot" style="background:var(--brass); box-shadow:0 0 6px var(--brass);"></span> ASK_KV.AI</div>
+    <button onclick="closeAI()" aria-label="Close">×</button>
+  </div>
+  <div id="ai-log"></div>
+  <div class="ai-suggestions" id="ai-suggestions"></div>
+  <div class="ai-input-row">
+    <input id="ai-input" type="text" placeholder="Ask about his stack, impact, or availability…" onkeydown="if(event.key==='Enter')sendAI()">
+    <button onclick="sendAI()">Send</button>
+  </div>
+</div>
+
+<script>
+  // ---- Résumé knowledge base for the fallback assistant ----
+  const KB = {
+    name: "Krishnakant Verma",
+    role: "Backend-focused .NET Software Engineer",
+    experienceYears: "2.5",
+    stack: "C#, ASP.NET Core, PostgreSQL, Dapper/EF Core, Redis, RabbitMQ, Docker, Azure, React, GraphQL, gRPC",
+    domains: "maritime fleet management and biofuel commodity trading (CTRM)",
+    current: "Senior Software Engineer at Fendahl International DWC LLC (Maritime Domain), since Jan 2026",
+    impact: [
+      "10x faster compliance report generation (30s+ → under 3s) via a Razor Engine reporting platform",
+      "95% reduction in manual crew onboarding effort through bulk import tooling",
+      "90% fewer event delivery failures after building an Outbox Pattern event system with retries and dead-letter tracking",
+      "65% faster payroll processing after rebuilding a multi-currency payroll system for 15+ vessels",
+      "70% less manual audit effort via a Work & Rest Hour Violation engine with zero regulatory breaches",
+      "55% faster PostgreSQL query response times after optimizing 15+ high-frequency queries"
+    ],
+    projects: "Contract Clause Analyzer (GPT-4 powered contract review), StreamCore (custom video streaming platform), plus three open concept builds: a Fleet Compliance Event Bus, a Commodity Settlement Ledger (CQRS), and this portfolio's own AI assistant",
+    education: "B.Tech in Computer Science from Government College of Engineering, Amravati (CGPA 8.99/10), and a Diploma in Computer Engineering from Government Polytechnic, Amravati (97.11%)",
+    contact: "vermakrishnakant138@gmail.com or +91-8329342791",
+    availability: "Open to backend and distributed systems roles — reach out by email for the fastest response."
+  };
+
+  const SUGGESTIONS = [
+    "What's his current role?",
+    "What's his biggest impact?",
+    "What's his tech stack?",
+    "Is he open to new roles?",
+    "Tell me about the concept builds"
+  ];
+
+  function el(tag, cls, text){
+    const e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(text) e.textContent = text;
+    return e;
+  }
+
+  function addMsg(text, who){
+    const log = document.getElementById('ai-log');
+    const m = el('div', 'msg ' + who, text);
+    log.appendChild(m);
+    log.scrollTop = log.scrollHeight;
+    return m;
+  }
+
+  function renderSuggestions(){
+    const box = document.getElementById('ai-suggestions');
+    box.innerHTML = '';
+    SUGGESTIONS.forEach(s => {
+      const c = el('button', 'chip', s);
+      c.onclick = () => { document.getElementById('ai-input').value = s; sendAI(); };
+      box.appendChild(c);
+    });
+  }
+
+  function openAI(){
+    document.getElementById('ai-panel').classList.add('open');
+    if(document.getElementById('ai-log').children.length === 0){
+      addMsg(`Hi — I'm a small assistant trained on ${KB.name}'s résumé. Ask me about his experience, stack, or the concept builds below.`, 'bot');
+      renderSuggestions();
+    }
+    document.getElementById('ai-input').focus();
+  }
+  function closeAI(){
+    document.getElementById('ai-panel').classList.remove('open');
+  }
+
+  // ---- Rule-based fallback (works with zero backend) ----
+  function localAnswer(q){
+    const s = q.toLowerCase();
+    if(/current|now|today|role|title/.test(s)) return `He's currently a ${KB.current}.`;
+    if(/impact|result|metric|number|achiev/.test(s)) return `A few highlights:\n• ${KB.impact.join('\n• ')}`;
+    if(/stack|tech|language|tool|skill/.test(s)) return `His core stack: ${KB.stack}. Domain focus: ${KB.domains}.`;
+    if(/available|hire|open to|looking/.test(s)) return KB.availability;
+    if(/project|build|concept|poc/.test(s)) return `Shipped: ${KB.projects}.`;
+    if(/education|degree|college|study/.test(s)) return `Education: ${KB.education}.`;
+    if(/contact|email|phone|reach/.test(s)) return `You can reach him at ${KB.contact}.`;
+    if(/experience|year|background/.test(s)) return `${KB.experienceYears} years as a ${KB.role}, focused on ${KB.domains}.`;
+    return `I've got structured info on his role, stack, impact numbers, projects, and education — try one of the suggestions below, or email him directly at ${KB.contact} for anything more specific.`;
+  }
+
+  // ---- Optional real backend hook. If /api/chat exists (see deploy package), it's used automatically. ----
+  async function remoteAnswer(q){
+    try{
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ question: q, context: KB })
+      });
+      if(!res.ok) throw new Error('no backend');
+      const data = await res.json();
+      return data.answer;
+    } catch(e){
+      return null; // fall through to local answer
+    }
+  }
+
+  let backendChecked = false, backendAvailable = false;
+
+  async function sendAI(){
+    const input = document.getElementById('ai-input');
+    const q = input.value.trim();
+    if(!q) return;
+    addMsg(q, 'user');
+    input.value = '';
+    const typing = addMsg('thinking…', 'bot typing');
+
+    let answer = null;
+    if(backendChecked && backendAvailable){
+      answer = await remoteAnswer(q);
+    } else if(!backendChecked){
+      answer = await remoteAnswer(q);
+      backendChecked = true;
+      backendAvailable = answer !== null;
+    }
+    if(answer === null) answer = localAnswer(q);
+
+    typing.remove();
+    addMsg(answer, 'bot');
+  }
+</script>
+
+</body>
+</html>
